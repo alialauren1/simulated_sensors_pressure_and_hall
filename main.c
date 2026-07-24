@@ -26,6 +26,8 @@
 #include "sl_system_process_action.h"
 #endif // SL_CATALOG_KERNEL_PRESENT
 
+#include "mod_sd_sim.h"
+
 int main(void)
 {
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
@@ -36,6 +38,8 @@ int main(void)
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
   app_init();
+  config_I2C0_register_as_slave();
+  init_mount_sd_open_csv();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -47,7 +51,8 @@ int main(void)
     sl_system_process_action();
 
     // Application process.
-    app_process_action();
+    respond_to_i2c();
+
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.

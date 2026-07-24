@@ -22,10 +22,12 @@
  * Initialize application.
  ******************************************************************************/
 void app_init(void);
+void config_I2C0_register_as_slave(void);
 
 /***************************************************************************//**
  * App ticking function.
  ******************************************************************************/
-void app_process_action(void);
+//void app_process_action(void);
+void respond_to_i2c(void);
 
 #endif  // APP_H

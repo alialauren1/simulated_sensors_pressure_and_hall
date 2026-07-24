@@ -15,16 +15,55 @@
  *
  ******************************************************************************/
 
+#include "em_cmu.h"
+#include "mod_sd_sim.h"
+
+typedef struct {
+  uint8_t status;
+  uint8_t p_hi, p_lo;
+  uint8_t t_hi, t_lo;
+  int     hall;
+} prepped_sensor_sample_t;
+
 /***************************************************************************//**
  * Initialize application.
  ******************************************************************************/
 void app_init(void)
 {
+  CMU_ClockEnable(cmuClock_I2C0, true);
+  CMU_ClockEnable(cmuClock_GPIO, true);
+
+  // SDA = PC0, SCL = PC1
+  GPIO_PinModeSet(gpioPortC, 0, gpioModeWiredAndPullUp, 1);
+  GPIO_PinModeSet(gpioPortC, 1, gpioModeWiredAndPullUp, 1);
+
+  // Hall output pin
+  GPIO_PinModeSet(gpioPortA, 12, gpioModePushPull, 1); // 1 = naturally HIGH (active-low output)
 }
 
-/***************************************************************************//**
- * App ticking function.
- ******************************************************************************/
-void app_process_action(void)
-{
+void config_I2C0_register_as_slave(void) {
+ // TODO: set address enable ACK, etc.
 }
+/***************************************************************************//**
+ * functions
+ ******************************************************************************/
+
+static void convert_row_to_i2c(parsed_sensor_sample_t *pointer){ // static keeps function private because only used in function below
+// TODO: convert the float and integer values to the i2c values
+}
+
+void respond_to_i2c(void){
+  // TODO: decide what to do based on what master sends via i2c
+
+  //  TODO: call the following functions when trigger byte was received from master
+   parsed_sensor_sample_t parsed; // local variable: row of csv data holding pressure, temp., and hall values
+//   read_parse_row(&parsed);
+//   convert_row_to_i2c(&parsed);
+}
+
+
+
+
+
+
+
