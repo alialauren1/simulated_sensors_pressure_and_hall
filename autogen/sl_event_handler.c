@@ -9,6 +9,7 @@
 #include "sl_device_init_clocks.h"
 #include "sl_device_init_emu.h"
 #include "sl_board_control.h"
+#include "sl_sleeptimer.h"
 
 void sl_platform_init(void)
 {
@@ -30,6 +31,7 @@ void sl_driver_init(void)
 void sl_service_init(void)
 {
   sl_board_configure_vcom();
+  sl_sleeptimer_init();
 }
 
 void sl_stack_init(void)

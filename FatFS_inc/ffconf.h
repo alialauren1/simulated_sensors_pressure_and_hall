@@ -4,7 +4,7 @@
 
 //#include "FreeRTOS.h"
 //#include "semphr.h"
-#include "os.h"
+//#include "os.h"
 
 #define _FFCONF 68020	/* Revision ID */
 
@@ -250,7 +250,7 @@
 /      lock control is independent of re-entrancy. */
 
 
-#define _FS_REENTRANT	1
+#define _FS_REENTRANT	0
 #define _FS_TIMEOUT		1000 * 10
 #define	_SYNC_t			  OS_MUTEX *
 /* The option _FS_REENTRANT switches the re-entrancy (thread safe) of the FatFs

@@ -27,6 +27,7 @@ component:
 - {id: brd2204c}
 - {id: device_init}
 - {id: sl_system}
+- {id: sleeptimer}
 define:
 - {name: DEBUG_EFM}
 ui_hints: {}

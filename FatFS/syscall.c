@@ -10,6 +10,7 @@
 
 
 #include "ff.h"
+#include "stdlib.h"
 
 
 #if _FS_REENTRANT
@@ -17,7 +18,7 @@
 //#include "FreeRTOS.h"
 //#include "semphr.h"
 #include "os.h"
-#include "stdlib.h"
+//#include "stdlib.h"
 
 #include "mod_som_config.h"
 
@@ -26,7 +27,7 @@ static RTOS_ERR err;
 static OS_MUTEX fatfs_mutex; // Workaround Fix: ignore sobj and use this persistent global instead. Single volume only
 
 /*------------------------------------------------------------------------*/
-/* Create a Synchronization Object
+/* Create a Synchronization Object */
 /*------------------------------------------------------------------------*/
 /* This function is called in f_mount() function to create a new
 /  synchronization object, such as semaphore and mutex. When a 0 is returned,

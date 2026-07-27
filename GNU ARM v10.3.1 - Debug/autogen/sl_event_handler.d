@@ -88,7 +88,9 @@ autogen/sl_event_handler.o: ../autogen/sl_event_handler.c \
  /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/device_init/inc/sl_device_init_lfxo.h \
  /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/device_init/inc/sl_device_init_clocks.h \
  /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/device_init/inc/sl_device_init_emu.h \
- /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//hardware/board/inc/sl_board_control.h
+ /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//hardware/board/inc/sl_board_control.h \
+ /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/sleeptimer/inc/sl_sleeptimer.h \
+ /Users/aliawolken/Documents/alia\ personal\ github/simulated_sensors_pressure_and_hall/config/sl_sleeptimer_config.h
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/common/toolchain/inc/sl_gcc_preinclude.h:
 ../autogen/sl_event_handler.h:
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/emlib/inc/em_chip.h:
@@ -179,3 +181,5 @@ autogen/sl_event_handler.o: ../autogen/sl_event_handler.c \
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/device_init/inc/sl_device_init_clocks.h:
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/device_init/inc/sl_device_init_emu.h:
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//hardware/board/inc/sl_board_control.h:
+/Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/service/sleeptimer/inc/sl_sleeptimer.h:
+/Users/aliawolken/Documents/alia\ personal\ github/simulated_sensors_pressure_and_hall/config/sl_sleeptimer_config.h:

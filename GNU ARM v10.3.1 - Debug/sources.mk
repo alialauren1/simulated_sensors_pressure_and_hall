@@ -16,6 +16,7 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+FatFS \
 . \
 autogen \
 gecko_sdk_4.1.4/hardware/board/src \
@@ -24,5 +25,6 @@ gecko_sdk_4.1.4/platform/common/src \
 gecko_sdk_4.1.4/platform/common/toolchain/src \
 gecko_sdk_4.1.4/platform/emlib/src \
 gecko_sdk_4.1.4/platform/service/device_init/src \
+gecko_sdk_4.1.4/platform/service/sleeptimer/src \
 gecko_sdk_4.1.4/platform/service/system/src \
 
