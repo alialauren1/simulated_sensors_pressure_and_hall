@@ -35,8 +35,6 @@ void app_init(void)
 {
   sl_iostream_set_default(sl_iostream_get_handle("vcom"));
 
-  printf("HI im in app_init\r\n");
-
   CMU_ClockEnable(cmuClock_I2C0, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
 

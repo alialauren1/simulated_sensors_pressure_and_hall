@@ -33,7 +33,6 @@ void init_mount_sd_open_csv(void){
   // mount sd card
   FRESULT res;
   MICROSD_Init();
-  printf("HI.\r\n");
   res = f_mount(&fat_fs,(TCHAR*)"", 1);
   if(res == FR_OK) { printf("FATfs mount success\r\n"); }
   else {printf("Unable to mount FAT fs.\r\n");}
