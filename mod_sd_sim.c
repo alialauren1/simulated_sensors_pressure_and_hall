@@ -11,6 +11,8 @@
 #include "microsd.h"
 #include <string.h>
 
+#define CSV_FILENAME "data_pool_test2_Jul15.csv"
+
 static FATFS fat_fs;
 static FIL fp;
 static FSIZE_t first_data_row_pointer;
@@ -36,8 +38,8 @@ void init_mount_sd_open_csv(void){
   else {printf("Unable to mount FAT fs.\r\n");}
 
   // open csv file
-  TCHAR file_name[16];
-  mod_sd_ff_encode("data_0000.csv", file_name, strlen("data_0000.csv")); // convert string (char) to UTF-8 (TCHAR)
+  TCHAR file_name[sizeof(CSV_FILENAME)];
+  mod_sd_ff_encode(CSV_FILENAME, file_name, strlen(CSV_FILENAME)); // convert string (char) to UTF-8 (TCHAR)
   FRESULT fres = f_open(&fp, file_name, FA_READ); // open file
   if(fres==FR_OK){
       TCHAR header_buffer[100];
