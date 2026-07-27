@@ -17,7 +17,7 @@ static FATFS fat_fs;
 static FIL fp;
 static FSIZE_t first_data_row_pointer;
 
-// Imported, 2025 12 05 LW: Function for converting strings (char) to UTF-8 (TCHAR) for path names
+// Imported mod_sd_ff_encode, 2025 12 05 LW: Function for converting strings (char) to UTF-8 (TCHAR) for path names
 void mod_sd_ff_encode(char* str, TCHAR* out, uint32_t len)
 {
   uint32_t i;
@@ -33,6 +33,7 @@ void init_mount_sd_open_csv(void){
   // mount sd card
   FRESULT res;
   MICROSD_Init();
+  printf("HI.\r\n");
   res = f_mount(&fat_fs,(TCHAR*)"", 1);
   if(res == FR_OK) { printf("FATfs mount success\r\n"); }
   else {printf("Unable to mount FAT fs.\r\n");}
@@ -43,9 +44,10 @@ void init_mount_sd_open_csv(void){
   FRESULT fres = f_open(&fp, file_name, FA_READ); // open file
   if(fres==FR_OK){
       TCHAR header_buffer[100];
-      f_gets(header_buffer, sizeof(header_buffer), &fp);  // read string from file, skip "MOD LAB: ..." line
-      f_gets(header_buffer, sizeof(header_buffer), &fp);  // read string from file, skip "Pressure [bar],..." line
+      f_gets(header_buffer, sizeof(header_buffer)/sizeof(header_buffer[0]), &fp);  // read string from file, skip "MOD LAB: ..." line
+      f_gets(header_buffer, sizeof(header_buffer)/sizeof(header_buffer[0]), &fp);  // read string from file, skip "Pressure [bar],..." line
       first_data_row_pointer = f_tell(&fp);
+      printf("Opened file \r\n");
   }
   else {
       printf("Issue opening and reading file, check SD card for file present\r\n");

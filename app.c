@@ -18,6 +18,9 @@
 #include "em_cmu.h"
 #include "mod_sd_sim.h"
 
+#include "sl_iostream.h"
+#include "sl_iostream_handles.h"
+
 typedef struct {
   uint8_t status;
   uint8_t p_hi, p_lo;
@@ -30,6 +33,10 @@ typedef struct {
  ******************************************************************************/
 void app_init(void)
 {
+  sl_iostream_set_default(sl_iostream_get_handle("vcom"));
+
+  printf("HI im in app_init\r\n");
+
   CMU_ClockEnable(cmuClock_I2C0, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
 
