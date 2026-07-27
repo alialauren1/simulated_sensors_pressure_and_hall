@@ -25,6 +25,7 @@ gecko_sdk_4.1.4/platform/common/src \
 gecko_sdk_4.1.4/platform/common/toolchain/src \
 gecko_sdk_4.1.4/platform/emlib/src \
 gecko_sdk_4.1.4/platform/service/device_init/src \
+gecko_sdk_4.1.4/platform/service/iostream/src \
 gecko_sdk_4.1.4/platform/service/sleeptimer/src \
 gecko_sdk_4.1.4/platform/service/system/src \
 

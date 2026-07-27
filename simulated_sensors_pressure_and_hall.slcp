@@ -26,6 +26,9 @@ component:
 - {id: EFM32GG11B820F2048GL192}
 - {id: brd2204c}
 - {id: device_init}
+- {id: iostream_retarget_stdio}
+- instance: [vcom]
+  id: iostream_usart
 - {id: sl_system}
 - {id: sleeptimer}
 define:

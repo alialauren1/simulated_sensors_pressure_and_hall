@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "microsd.h"
 
-static volatile FATFS fat_fs;
+static FATFS fat_fs;
 
 void init_mount_sd_open_csv(void){
  // TODO: open csv file and skip headers
@@ -21,7 +21,7 @@ void init_mount_sd_open_csv(void){
 
   res = f_mount(&fat_fs,(TCHAR*)"", 1);
 
-  if(res == (FRESULT)RES_OK)
+  if(res ==FR_OK)
   {
       printf("FATfs mount success\r\n");
   }

@@ -206,6 +206,26 @@
 // [USART3]$
 
 // $[USART4]
+// USART4 CTS on PH8
+#define USART4_CTS_PORT                          gpioPortH
+#define USART4_CTS_PIN                           8
+#define USART4_CTS_LOC                           4
+
+// USART4 RTS on PH9
+#define USART4_RTS_PORT                          gpioPortH
+#define USART4_RTS_PIN                           9
+#define USART4_RTS_LOC                           4
+
+// USART4 RX on PH5
+#define USART4_RX_PORT                           gpioPortH
+#define USART4_RX_PIN                            5
+#define USART4_RX_LOC                            4
+
+// USART4 TX on PH4
+#define USART4_TX_PORT                           gpioPortH
+#define USART4_TX_PIN                            4
+#define USART4_TX_LOC                            4
+
 // [USART4]$
 
 // $[USART5]
