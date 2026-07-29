@@ -80,6 +80,7 @@ app.o: ../app.c \
  /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/emlib/inc/em_gpio.h \
  /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/common/inc/sl_enum.h \
  ../mod_sd_sim.h
+ /Users/aliawolken/Documents/alia\ personal\ github/simulated_sensors_pressure_and_hall/autogen/sl_component_catalog.h \
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/common/toolchain/inc/sl_gcc_preinclude.h:
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/emlib/inc/em_cmu.h:
 /Users/aliawolken/SimplicityStudio/SDKs/gecko_sdk//platform/Device/SiliconLabs/EFM32GG11B/Include/em_device.h:
