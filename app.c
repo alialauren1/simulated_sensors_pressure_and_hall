@@ -24,7 +24,6 @@
 
 static volatile bool row_read_flag = true;  // start true so the very first loop iteration fires one read
 
-
 typedef struct {
   uint8_t status;
   uint8_t p_hi, p_lo;
@@ -57,7 +56,7 @@ void config_I2C0_register_as_slave(void) {
  * functions
  ******************************************************************************/
 
-static void convert_row_to_i2c(parsed_sensor_sample_t *pointer){ // static keeps function private because only used in function below
+static void convert_row_to_i2c(parsed_sensor_sample_t *pointer, prepped_sensor_sample_t*out_pointer){ // static keeps function private because only used in function below
 // TODO: convert the float and integer values to the i2c values
 }
 
@@ -66,12 +65,13 @@ void respond_to_i2c(void){
 
   //  TODO: call the following functions when trigger byte was received from master
    parsed_sensor_sample_t parsed; // local variable: row of csv data holding pressure, temp., and hall values
-//   read_parse_row(&parsed);
-//   convert_row_to_i2c(&parsed);
+   static prepped_sensor_sample_t prepped_sample;
 
    if (row_read_flag){ // this will change when start detecting real I2c master
        read_parse_row(&parsed);
        row_read_flag = false;
+       convert_row_to_i2c(&parsed, &prepped_sample); // sends parsed values and receives i2c prepped samples
+       printf("hi=%d p_lo=%d ...\r\n", prepped_sample.p_hi, prepped_sample.p_lo);
    }
 
 }
