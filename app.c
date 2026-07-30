@@ -75,7 +75,7 @@ static void convert_row_to_i2c(parsed_sensor_sample_t *pointer, prepped_sensor_s
 
   out_pointer->hall = pointer->hall;
 
-  // add status
+  out_pointer->status = 0x40;
 
 }
 
@@ -90,7 +90,7 @@ void respond_to_i2c(void){
        read_parse_row(&parsed);
        row_read_flag = false;
        convert_row_to_i2c(&parsed, &prepped_sample); // sends parsed values and receives i2c prepped samples
-       printf("p_hi=%d p_lo=%d t_hi=%d t_lo=%d\r\n", prepped_sample.p_hi, prepped_sample.p_lo,prepped_sample.t_hi, prepped_sample.t_lo);
+       printf("status = %d p_hi=%d p_lo=%d t_hi=%d t_lo=%d\r\n", prepped_sample.status, prepped_sample.p_hi, prepped_sample.p_lo,prepped_sample.t_hi, prepped_sample.t_lo);
    }
 
 }
