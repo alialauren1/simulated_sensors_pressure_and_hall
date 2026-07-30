@@ -24,6 +24,9 @@
 
 #include "math.h"
 
+#include "em_i2c.h"
+#include <stdio.h>
+
 static volatile bool row_read_flag = true;  // start true so the very first loop iteration fires one read
 
 typedef struct {
@@ -32,6 +35,14 @@ typedef struct {
   uint8_t t_hi, t_lo;
   int     hall;
 } prepped_sensor_sample_t;
+
+#define I2C0_SDA_PORT   gpioPortC
+#define I2C0_SDA_PIN    0
+#define I2C0_SDA_LOC    4 // LOC number is pin information , Loc 4 -> knows PC0
+
+#define I2C0_SCL_PORT   gpioPortC
+#define I2C0_SCL_PIN    1
+#define I2C0_SCL_LOC    4
 
 /***************************************************************************//**
  * Initialize application.
@@ -43,9 +54,9 @@ void app_init(void)
   CMU_ClockEnable(cmuClock_I2C0, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
 
-  // SDA = PC0, SCL = PC1
-  GPIO_PinModeSet(gpioPortC, 0, gpioModeWiredAndPullUp, 1);
-  GPIO_PinModeSet(gpioPortC, 1, gpioModeWiredAndPullUp, 1);
+  // configure i2c pins, SDA = PC0, SCL = PC1
+  GPIO_PinModeSet(I2C0_SDA_PORT, I2C0_SDA_PIN, gpioModeWiredAndPullUp, 1);
+  GPIO_PinModeSet(I2C0_SCL_PORT, I2C0_SCL_PIN, gpioModeWiredAndPullUp, 1);
 
   // Hall output pin
   GPIO_PinModeSet(gpioPortA, 12, gpioModePushPull, 1); // 1 = naturally HIGH (active-low output)
@@ -53,7 +64,15 @@ void app_init(void)
 }
 
 void config_I2C0_register_as_slave(void) {
- // TODO: set address enable ACK, etc.
+  I2C0->ROUTELOC0 = (I2C0_SDA_LOC << 0) | (I2C0_SCL_LOC << 8);  // rm 18.5.19 Routing Location Register (Pg 714) & datasheet Pin definitions (Pg 191)
+  I2C0->ROUTEPEN  = I2C_ROUTEPEN_SDAPEN | I2C_ROUTEPEN_SCLPEN;  // (rm 18.5.18, p.713)
+
+  I2C_SlaveAddressSet(I2C0, 0x40 << 1);                         // matches Keller pressure sensor peripheral address
+  I2C_SlaveAddressMaskSet(I2C0, 0x7F << 1);                     // matches addresses to exact address specified by ADDR , rm 18.5.7 (pg 702)
+
+  I2C0->IEN = 0;                                                // disables interrupts, rm 18.5.17 (pg. 712)
+  I2C0->CTRL = I2C_CTRL_SLAVE | I2C_CTRL_AUTOACK | I2C_CTRL_EN; // puts i2c slave mode, tells hardware to auto-ACK matching address and all received data without software, and turns the peripheral on (rm 18.5.1, pg. 695-697)
+                                                                //
 }
 /***************************************************************************//**
  * functions
@@ -62,13 +81,13 @@ void config_I2C0_register_as_slave(void) {
 static void convert_row_to_i2c(parsed_sensor_sample_t *pointer, prepped_sensor_sample_t*out_pointer){ // static keeps function private because only used in function below
 
   // convert float to integer values
-  float p_mbar = pointer->p_bar * 1000.0f;
-  int32_t P_raw = (int32_t)roundf(p_mbar * 32768.0f / 100000.0f) + 16384;
+  float p_mbar = pointer->p_bar * 1000.0f;                                // convert from bar to mbar
+  int32_t P_raw = (int32_t)roundf(p_mbar * 32768.0f / 100000.0f) + 16384; // back calculate using inverse of equation used in mod_power_switch folder
   out_pointer->p_hi = (uint8_t)((P_raw >> 8) & 0xFF);
   out_pointer->p_lo = (uint8_t)(P_raw & 0xFF);
 
   int32_t t_centi = (int32_t)roundf((pointer->temp_f * 100 - 3200) * 5.0f / 9.0f);  // °F -> centi-°C
-  int32_t T_raw = (((t_centi + 5000) / 5) + 24) << 4;
+  int32_t T_raw = (((t_centi + 5000) / 5) + 24) << 4;                     // inverse of equation used in mod_power_switch folder
   out_pointer->t_hi = (uint8_t)((T_raw >> 8) & 0xFF);
   out_pointer->t_lo = (uint8_t)(T_raw & 0xFF);
 
