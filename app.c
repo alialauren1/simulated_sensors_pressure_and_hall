@@ -60,7 +60,6 @@ void config_I2C0_register_as_slave(void) {
  ******************************************************************************/
 
 static void convert_row_to_i2c(parsed_sensor_sample_t *pointer, prepped_sensor_sample_t*out_pointer){ // static keeps function private because only used in function below
-// TODO: convert the float and integer values to the i2c values
 
   // convert float to integer values
   float p_mbar = pointer->p_bar * 1000.0f;
