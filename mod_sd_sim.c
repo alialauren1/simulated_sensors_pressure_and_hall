@@ -67,6 +67,7 @@ void read_parse_row(parsed_sensor_sample_t *out_pointer){
   char line[64];   // buffer that is a char
 
   int n;
+  int matched;
 
   TCHAR *getter = f_gets(wline,sizeof(wline)/sizeof(wline[0]),&fp);
   printf(getter == NULL ? "first f_gets: NULL\r\n" : "first f_gets: OK\r\n");
@@ -80,7 +81,15 @@ void read_parse_row(parsed_sensor_sample_t *out_pointer){
       line[n]=(char)wline[n];
   }
   line[n]='\0';
-  printf("row: %s\r\n",line);
+
+  matched = sscanf(line, "%f,%f,%*f,%d,%*d",
+                    &out_pointer->p_bar, &out_pointer->temp_f, &out_pointer->hall); // * prevents from assigning
+
+  if (matched == 3) {
+      printf("parsed: p_bar=%.3f temp_f=%.2f hall=%d\r\n",
+             out_pointer->p_bar, out_pointer->temp_f, out_pointer->hall);
+  }
+//  printf("row: %s\r\n",line);
 
 }
 
