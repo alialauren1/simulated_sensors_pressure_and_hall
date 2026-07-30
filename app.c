@@ -27,7 +27,7 @@
 #include "em_i2c.h"
 #include <stdio.h>
 
-static volatile bool row_read_flag = true;  // start true so the very first loop iteration fires one read
+static volatile bool row_read_flag = false;  // start true so the very first loop iteration fires one read
 
 typedef struct {
   uint8_t status;
@@ -38,7 +38,7 @@ typedef struct {
 
 #define I2C0_SDA_PORT   gpioPortC
 #define I2C0_SDA_PIN    0
-#define I2C0_SDA_LOC    4 // LOC number is pin information , Loc 4 -> knows PC0
+#define I2C0_SDA_LOC    4 // LOC number is pin information , in datasheet Table 5.21, I2C0's SDA signal LOC=4 routes to PC0
 
 #define I2C0_SCL_PORT   gpioPortC
 #define I2C0_SCL_PIN    1
