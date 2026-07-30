@@ -22,6 +22,8 @@
 #include "sl_iostream_handles.h"
 #include <stdbool.h>
 
+#include "math.h"
+
 static volatile bool row_read_flag = true;  // start true so the very first loop iteration fires one read
 
 typedef struct {
@@ -47,6 +49,7 @@ void app_init(void)
 
   // Hall output pin
   GPIO_PinModeSet(gpioPortA, 12, gpioModePushPull, 1); // 1 = naturally HIGH (active-low output)
+  printf("\r\n-----------------------\r\n");
 }
 
 void config_I2C0_register_as_slave(void) {
@@ -58,6 +61,22 @@ void config_I2C0_register_as_slave(void) {
 
 static void convert_row_to_i2c(parsed_sensor_sample_t *pointer, prepped_sensor_sample_t*out_pointer){ // static keeps function private because only used in function below
 // TODO: convert the float and integer values to the i2c values
+
+  // convert float to integer values
+  float p_mbar = pointer->p_bar * 1000.0f;
+  int32_t P_raw = (int32_t)roundf(p_mbar * 32768.0f / 100000.0f) + 16384;
+  out_pointer->p_hi = (uint8_t)((P_raw >> 8) & 0xFF);
+  out_pointer->p_lo = (uint8_t)(P_raw & 0xFF);
+
+  int32_t t_centi = (int32_t)roundf((pointer->temp_f * 100 - 3200) * 5.0f / 9.0f);  // °F -> centi-°C
+  int32_t T_raw = (((t_centi + 5000) / 5) + 24) << 4;
+  out_pointer->t_hi = (uint8_t)((T_raw >> 8) & 0xFF);
+  out_pointer->t_lo = (uint8_t)(T_raw & 0xFF);
+
+  out_pointer->hall = pointer->hall;
+
+  // add status
+
 }
 
 void respond_to_i2c(void){
@@ -71,7 +90,7 @@ void respond_to_i2c(void){
        read_parse_row(&parsed);
        row_read_flag = false;
        convert_row_to_i2c(&parsed, &prepped_sample); // sends parsed values and receives i2c prepped samples
-       printf("hi=%d p_lo=%d ...\r\n", prepped_sample.p_hi, prepped_sample.p_lo);
+       printf("p_hi=%d p_lo=%d t_hi=%d t_lo=%d\r\n", prepped_sample.p_hi, prepped_sample.p_lo,prepped_sample.t_hi, prepped_sample.t_lo);
    }
 
 }
