@@ -70,9 +70,9 @@ void read_parse_row(parsed_sensor_sample_t *out_pointer){
   int matched;
 
   TCHAR *getter = f_gets(wline,sizeof(wline)/sizeof(wline[0]),&fp);
-  printf(getter == NULL ? "first f_gets: NULL\r\n" : "first f_gets: OK\r\n");
-  printf("wline[0]=%d wline[1]=%d wline[2]=%d wline[3]=%d\r\n",
-         (int)wline[0], (int)wline[1], (int)wline[2], (int)wline[3]);
+//  printf(getter == NULL ? "first f_gets: NULL\r\n" : "first f_gets: OK\r\n");
+//  printf("wline[0]=%d wline[1]=%d wline[2]=%d wline[3]=%d\r\n",
+//         (int)wline[0], (int)wline[1], (int)wline[2], (int)wline[3]);
   if (getter==NULL){
       f_lseek(&fp,first_data_row_pointer); // move to first row if issue
       getter = f_gets(wline,sizeof(wline)/sizeof(wline[0]),&fp);
@@ -86,8 +86,8 @@ void read_parse_row(parsed_sensor_sample_t *out_pointer){
                     &out_pointer->p_bar, &out_pointer->temp_f, &out_pointer->hall); // * prevents from assigning
 
   if (matched == 3) {
-      printf("parsed: p_bar=%.3f temp_f=%.2f hall=%d\r\n",
-             out_pointer->p_bar, out_pointer->temp_f, out_pointer->hall);
+//      printf("parsed: p_bar=%.3f temp_f=%.2f hall=%d\r\n",
+//             out_pointer->p_bar, out_pointer->temp_f, out_pointer->hall);
   }
 //  printf("row: %s\r\n",line);
 
