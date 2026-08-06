@@ -72,8 +72,6 @@ void config_I2C0_register_as_slave(void) {
 
   I2C0->IEN = 0;                                                // disables interrupts, rm 18.5.17 (pg. 712)
   I2C0->CTRL = I2C_CTRL_SLAVE | I2C_CTRL_AUTOACK | I2C_CTRL_EN; // puts i2c slave mode, tells hardware to auto-ACK matching address and all received data without software, and turns the peripheral on (rm 18.5.1, pg. 695-697)
-
-  I2C0->TXDATA = 0x40;  // pre-load status into transmit buffer at init time
 }
 /***************************************************************************//**
  * functions
@@ -108,20 +106,22 @@ void respond_to_i2c(void){
 
    if (i2c_flags & I2C_IF_ADDR) {
        uint8_t addr_byte = I2C0->RXDATA;
-       printf("ADDR: addr_byte=0x%02X (%s)\r\n", addr_byte, (addr_byte & 0x1) ? "READ" : "WRITE");
+//       printf("ADDR: addr_byte=0x%02X (%s)\r\n", addr_byte, (addr_byte & 0x1) ? "READ" : "WRITE");
        if (addr_byte & 0x1) {
            read_flag = true;
+           I2C0->CMD = I2C_CMD_CLEARTX;   // drop leftover byte from previous transaction
            I2C0->TXDATA = prepped_sample.status;
            tx_index = 1;
        }
        else                 { write_flag = false; }
        I2C0->IFC = I2C_IFC_ADDR;
+       i2c_flags = I2C0->IF;      // address byte consumed RXDATAV; re-read
    }
 
 
    if ((i2c_flags & I2C_IF_RXDATAV) && !read_flag) {
        uint8_t cmd_byte = I2C0->RXDATA;
-       printf("RXDATAV: cmd_byte=0x%02X\r\n", cmd_byte);
+//       printf("RXDATAV: cmd_byte=0x%02X\r\n", cmd_byte);
        if (cmd_byte == 0xAC) write_flag = true;
    }
 
@@ -134,13 +134,13 @@ void respond_to_i2c(void){
            case 3: next_byte = prepped_sample.t_hi;   break;
            default: next_byte = prepped_sample.t_lo;  break;
        }
-       printf("TXBL: tx_index=%d sending 0x%02X\r\n", tx_index, next_byte);
+//       printf("TXBL: tx_index=%d sending 0x%02X\r\n", tx_index, next_byte);
        I2C0->TXDATA = next_byte;
        if (tx_index < 4) tx_index++;
    }
 
    if (i2c_flags & I2C_IF_SSTOP) {
-       printf("SSTOP: write_flag=%d\r\n", write_flag);
+//       printf("SSTOP: write_flag=%d\r\n", write_flag);
        if (write_flag) row_read_flag = true;
        write_flag = false;
        read_flag = false;
@@ -158,23 +158,6 @@ void respond_to_i2c(void){
    }
 }
 
-//void respond_to_i2c(void){
-//  // TODO: decide what to do based on what master sends via i2c
-//  //  TODO: call the following functions when trigger byte was received from master
-//
-//
-//
-//   parsed_sensor_sample_t parsed; // local variable: row of csv data holding pressure, temp., and hall values
-//   static prepped_sensor_sample_t prepped_sample;
-//
-//   if (row_read_flag){ // this will change when start detecting real I2c master
-//       read_parse_row(&parsed);
-//       row_read_flag = false;
-//       convert_row_to_i2c(&parsed, &prepped_sample); // sends parsed values and receives i2c prepped samples
-//       printf("status = %d p_hi=%d p_lo=%d t_hi=%d t_lo=%d\r\n", prepped_sample.status, prepped_sample.p_hi, prepped_sample.p_lo,prepped_sample.t_hi, prepped_sample.t_lo);
-//   }
-//
-//}
 
 
 
